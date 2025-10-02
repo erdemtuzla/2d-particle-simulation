@@ -1,0 +1,9 @@
+## GENERAL
+#.vscode/
+build/
+
+## LEFTOVERS
+src/*.exe
+src/*.obj
+src/*.pdb
+src/*.ilk
