@@ -1,16 +1,35 @@
+name: Build (self-hosted UCRT64)
+
 on:
   push:
-    branches:
-    - release
+    branches: [release]
   workflow_dispatch:
 
 jobs:
-  job_build:
-    name: Build on ${{matrix.os}}
-    runs-on: ${{matrix.os}}
-    
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, windows-2022]
+  build-windows-msys2-ucrt64:
+    runs-on: self-hosted
 
     steps:
+      # Prevent CRLF->LF problems inside MSYS2 (do this BEFORE checkout)
+      - name: Git line endings
+        run: git config --global core.autocrlf input
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use existing MSYS2 (UCRT64)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          release: false          # do NOT download a portable MSYS2
+          location: C:\msys64     # your real install
+          update: false           # skip pacman -Syu (set true if you want updates)
+          install: ''  
+
+      - name: Configure (Ninja, Release, C++23)
+        shell: msys2 {0}
+        run: cmake --preset windows-ucrt64-debug
+
+      - name: Build
+        shell: msys2 {0}
+        run: cmake --build --preset build-windows-debug -j
