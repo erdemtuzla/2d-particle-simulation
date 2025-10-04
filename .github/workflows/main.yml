@@ -1,0 +1,32 @@
+name: Build (self-hosted UCRT64)
+
+on:
+  push:
+    branches: [release]
+  workflow_dispatch:
+
+jobs:
+  build-windows-msys2-ucrt64:
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use existing MSYS2 (UCRT64)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          release: false                    # do NOT download a portable MSYS2
+          location: C:\msys64\ucrt64\bin    # your real install
+          update: false                     # skip pacman -Syu (set true if you want updates)
+          # install: ''  
+
+      - name: Configure (Ninja, Release, C++23)
+        shell: msys2 {0}
+        run: cmake --preset windows-ucrt64-debug
+
+      - name: Build
+        shell: msys2 {0}
+        run: cmake --build --preset build-windows-debug -j

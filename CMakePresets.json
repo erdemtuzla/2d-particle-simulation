@@ -1,0 +1,64 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 25 },
+  "configurePresets": [
+    {
+      "name": "windows-ucrt64-debug",
+      "displayName": "Windows UCRT64 - Debug",
+      "generator": "Ninja",
+      "binaryDir": "build/windows-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
+        "CMAKE_MAKE_PROGRAM": "C:/msys64/ucrt64/bin/ninja.exe"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-ucrt64-release",
+      "displayName": "Windows UCRT64 - Release",
+      "inherits": "windows-ucrt64-debug",
+      "binaryDir": "build/windows-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "linux-gcc-debug",
+      "displayName": "Linux GCC - Debug",
+      "generator": "Ninja",
+      "binaryDir": "build/linux-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "linux-gcc-release",
+      "displayName": "Linux GCC - Release",
+      "inherits": "linux-gcc-debug",
+      "binaryDir": "build/linux-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "build-windows-debug", "configurePreset": "windows-ucrt64-debug", "configuration": "Debug" },
+    { "name": "build-windows-release", "configurePreset": "windows-ucrt64-release", "configuration": "Release" },
+    { "name": "build-linux-debug", "configurePreset": "linux-gcc-debug", "configuration": "Debug" },
+    { "name": "build-linux-release", "configurePreset": "linux-gcc-release", "configuration": "Release" }
+  ],
+  "testPresets": []
+}
