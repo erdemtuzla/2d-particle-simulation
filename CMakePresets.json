@@ -1,6 +1,9 @@
 {
   "version": 6,
-  "cmakeMinimumRequired": { "major": 3, "minor": 25 },
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25
+  },
   "configurePresets": [
     {
       "name": "windows-ucrt64-debug",
@@ -10,8 +13,27 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
-        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
-        "CMAKE_MAKE_PROGRAM": "C:/msys64/ucrt64/bin/ninja.exe"
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe"
+      },
+      "environment": {
+        "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-ucrt64-debug-github-actions",
+      "displayName": "Windows UCRT64 - Debug",
+      "generator": "Ninja",
+      "binaryDir": "build/windows-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "environment": {
+        "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
       },
       "condition": {
         "type": "equals",
@@ -55,10 +77,31 @@
     }
   ],
   "buildPresets": [
-    { "name": "build-windows-debug", "configurePreset": "windows-ucrt64-debug", "configuration": "Debug" },
-    { "name": "build-windows-release", "configurePreset": "windows-ucrt64-release", "configuration": "Release" },
-    { "name": "build-linux-debug", "configurePreset": "linux-gcc-debug", "configuration": "Debug" },
-    { "name": "build-linux-release", "configurePreset": "linux-gcc-release", "configuration": "Release" }
+    {
+      "name": "build-windows-debug",
+      "configurePreset": "windows-ucrt64-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "build-windows-debug-github-actions",
+      "configurePreset": "windows-ucrt64-debug-github-actions",
+      "configuration": "Debug"
+    },
+    {
+      "name": "build-windows-release",
+      "configurePreset": "windows-ucrt64-release",
+      "configuration": "Release"
+    },
+    {
+      "name": "build-linux-debug",
+      "configurePreset": "linux-gcc-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "build-linux-release",
+      "configurePreset": "linux-gcc-release",
+      "configuration": "Release"
+    }
   ],
   "testPresets": []
 }
